@@ -9,7 +9,10 @@ dependencies:
     sdk: flutter
   rxdart: ^0.27.2
   todos_repository_core:
-    path: ../todos_repository_core
+    git:
+      url: https://github.com/jeroen-meijer/flutter_architecture_samples
+      path: todos_repository_core
+      ref: feat/todos-nnbd
 
 dev_dependencies:
   flutter_test:
