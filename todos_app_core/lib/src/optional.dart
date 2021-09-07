@@ -10,7 +10,7 @@ import 'dart:collection';
 /// values to be null. It signals that a value is not required and provides
 /// convenience methods for dealing with the absent case.
 class Optional<T> extends IterableBase<T> {
-  final T _value;
+  final T? _value;
 
   /// Constructs an empty Optional.
   const Optional.absent() : _value = null;
@@ -18,8 +18,8 @@ class Optional<T> extends IterableBase<T> {
   /// Constructs an Optional of the given [value].
   ///
   /// Throws [ArgumentError] if [value] is null.
-  Optional.of(T value) : this._value = value {
-    if (this._value == null) throw ArgumentError('Must not be null.');
+  Optional.of(T value) : _value = value {
+    if (isNotPresent) throw ArgumentError('Must not be null.');
   }
 
   /// Constructs an Optional of the given [value].
@@ -37,22 +37,22 @@ class Optional<T> extends IterableBase<T> {
   ///
   /// Throws [StateError] if [value] is null.
   T get value {
-    if (this._value == null) {
+    if (isNotPresent) {
       throw StateError('value called on absent Optional.');
     }
-    return _value;
+    return _value!;
   }
 
   /// Executes a function if the Optional value is present.
   void ifPresent(void ifPresent(T value)) {
     if (isPresent) {
-      ifPresent(_value);
+      ifPresent(_value!);
     }
   }
 
   /// Execution a function if the Optional value is absent.
-  void ifAbsent(void ifAbsent()) {
-    if (!isPresent) {
+  void ifAbsent(void Function() ifAbsent) {
+    if (isNotPresent) {
       ifAbsent();
     }
   }
@@ -66,26 +66,23 @@ class Optional<T> extends IterableBase<T> {
     if (defaultValue == null) {
       throw ArgumentError('defaultValue must not be null.');
     }
-    return _value == null ? defaultValue : _value;
+    return isNotPresent ? defaultValue : _value!;
   }
 
   /// Gets the Optional value, or [null] if there is none.
-  T get orNull => _value;
+  T? get orNull => _value;
 
   /// Transforms the Optional value.
   ///
   /// If the Optional is [absent()], returns [absent()] without applying the transformer.
   ///
   /// The transformer must not return [null]. If it does, an [ArgumentError] is thrown.
-  Optional<S> transform<S>(S transformer(T value)) {
-    return _value == null
-        ? Optional.absent()
-        : Optional.of(transformer(_value));
+  Optional<S> transform<S>(S Function(T value) transformer) {
+    return isNotPresent ? Optional.absent() : Optional.of(transformer(_value!));
   }
 
   @override
-  Iterator<T> get iterator =>
-      isPresent ? <T>[_value].iterator : Iterable<T>.empty().iterator;
+  Iterator<T> get iterator => <T>[if (isPresent) _value!].iterator;
 
   /// Delegates to the underlying [value] hashCode.
   int get hashCode => _value.hashCode;
@@ -94,7 +91,7 @@ class Optional<T> extends IterableBase<T> {
   bool operator ==(o) => o is Optional && o._value == _value;
 
   String toString() {
-    return _value == null
+    return isNotPresent
         ? 'Optional { absent }'
         : 'Optional { value: ${_value} }';
   }

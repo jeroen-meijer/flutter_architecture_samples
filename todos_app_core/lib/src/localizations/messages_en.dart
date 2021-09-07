@@ -1,3 +1,7 @@
+// <MANUAL EDITS>
+// ignore_for_file: import_of_legacy_library_into_null_safe
+// </MANUAL EDITS>
+
 // Copyright 2018 The Flutter Architecture Sample Authors. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found
 // in the LICENSE file.

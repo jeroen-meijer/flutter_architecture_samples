@@ -1,3 +1,7 @@
+// <MANUAL EDITS>
+// ignore_for_file: import_of_legacy_library_into_null_safe
+// </MANUAL EDITS>
+
 // Copyright 2018 The Flutter Architecture Sample Authors. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found
 // in the LICENSE file.
@@ -20,7 +24,7 @@ Map<String, LibraryLoader> _deferredLibraries = {
   'en': () => Future.value(null),
 };
 
-MessageLookupByLibrary _findExact(localeName) {
+MessageLookupByLibrary? _findExact(localeName) {
   switch (localeName) {
     case 'en':
       return messages_en.messages;
@@ -45,9 +49,12 @@ bool _messagesExistFor(String locale) {
   }
 }
 
-MessageLookupByLibrary _findGeneratedMessagesFor(locale) {
-  var actualLocale =
-      Intl.verifiedLocale(locale, _messagesExistFor, onFailure: (_) => null);
+MessageLookupByLibrary? _findGeneratedMessagesFor(locale) {
+  var actualLocale = Intl.verifiedLocale(
+    locale,
+    _messagesExistFor,
+    onFailure: (_) => null,
+  ) as String?;
   if (actualLocale == null) return null;
   return _findExact(actualLocale);
 }

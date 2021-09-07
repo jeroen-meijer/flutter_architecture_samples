@@ -20,9 +20,11 @@ class ArchSampleLocalizations {
     });
   }
 
-  static ArchSampleLocalizations of(BuildContext context) {
+  static ArchSampleLocalizations? of(BuildContext context) {
     return Localizations.of<ArchSampleLocalizations>(
-        context, ArchSampleLocalizations);
+      context,
+      ArchSampleLocalizations,
+    );
   }
 
   String get todos => Intl.message(
