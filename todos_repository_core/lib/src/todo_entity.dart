@@ -3,12 +3,17 @@
 // in the LICENSE file.
 
 class TodoEntity {
+  const TodoEntity(
+    this.task,
+    this.id,
+    this.note,
+    this.complete,
+  );
+
   final bool complete;
   final String id;
   final String note;
   final String task;
-
-  TodoEntity(this.task, this.id, this.note, this.complete);
 
   @override
   int get hashCode =>

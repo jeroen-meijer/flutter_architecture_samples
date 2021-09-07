@@ -21,5 +21,5 @@ abstract class TodosRepository {
   Future<List<TodoEntity>> loadTodos();
 
   // Persists todos to local disk and the web
-  Future saveTodos(List<TodoEntity> todos);
+  Future<void> saveTodos(List<TodoEntity> todos);
 }

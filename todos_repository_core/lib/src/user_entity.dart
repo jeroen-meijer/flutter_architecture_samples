@@ -3,11 +3,15 @@
 // in the LICENSE file.
 
 class UserEntity {
-  final String id;
-  final String displayName;
-  final String photoUrl;
+  final String? id;
+  final String? displayName;
+  final String? photoUrl;
 
-  UserEntity({this.id, this.displayName, this.photoUrl});
+  UserEntity({
+    this.id,
+    this.displayName,
+    this.photoUrl,
+  });
 
   @override
   bool operator ==(Object other) =>

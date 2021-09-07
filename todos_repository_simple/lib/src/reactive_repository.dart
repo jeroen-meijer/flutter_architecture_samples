@@ -5,7 +5,6 @@
 import 'dart:async';
 import 'dart:core';
 
-import 'package:meta/meta.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:todos_repository_core/todos_repository_core.dart';
 
@@ -17,16 +16,20 @@ class ReactiveTodosRepositoryFlutter implements ReactiveTodosRepository {
   bool _loaded = false;
 
   ReactiveTodosRepositoryFlutter({
-    @required TodosRepository repository,
-    List<TodoEntity> seedValue,
+    required TodosRepository repository,
+    List<TodoEntity>? seedValue,
   })  : this._repository = repository,
-        this._subject = BehaviorSubject<List<TodoEntity>>.seeded(seedValue);
+        this._subject =
+            BehaviorSubject<List<TodoEntity>>.seeded(seedValue ?? const []);
 
   @override
   Future<void> addNewTodo(TodoEntity todo) async {
-    _subject.add(List.unmodifiable([]
-      ..addAll(_subject.value ?? [])
-      ..add(todo)));
+    _subject.add(
+      List.unmodifiable([
+        ..._subject.value,
+        todo,
+      ]),
+    );
 
     await _repository.saveTodos(_subject.value);
   }
@@ -34,11 +37,10 @@ class ReactiveTodosRepositoryFlutter implements ReactiveTodosRepository {
   @override
   Future<void> deleteTodo(List<String> idList) async {
     _subject.add(
-      List<TodoEntity>.unmodifiable(_subject.value.fold<List<TodoEntity>>(
+      List.unmodifiable(_subject.value.fold<List<TodoEntity>>(
         <TodoEntity>[],
-        (prev, entity) {
-          return idList.contains(entity.id) ? prev : (prev..add(entity));
-        },
+        (prev, entity) =>
+            idList.contains(entity.id) ? prev : (prev..add(entity)),
       )),
     );
 
@@ -56,16 +58,19 @@ class ReactiveTodosRepositoryFlutter implements ReactiveTodosRepository {
     _loaded = true;
 
     _repository.loadTodos().then((entities) {
-      _subject.add(List<TodoEntity>.unmodifiable(
-        []..addAll(_subject.value ?? [])..addAll(entities),
-      ));
+      _subject.add(
+        List.unmodifiable([
+          ..._subject.value,
+          ...entities,
+        ]),
+      );
     });
   }
 
   @override
   Future<void> updateTodo(TodoEntity update) async {
     _subject.add(
-      List<TodoEntity>.unmodifiable(_subject.value.fold<List<TodoEntity>>(
+      List.unmodifiable(_subject.value.fold<List<TodoEntity>>(
         <TodoEntity>[],
         (prev, entity) => prev..add(entity.id == update.id ? update : entity),
       )),

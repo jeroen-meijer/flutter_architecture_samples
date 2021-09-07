@@ -2,18 +2,16 @@ name: todos_repository_simple
 description: An app-agnostic data source that can be used by all implementations
 
 environment:
-  sdk: '>=2.0.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  rxdart: ^0.27.2
   todos_repository_core:
-    git:
-      url: https://github.com/felangel/flutter_architecture_samples
-      path: todos_repository_core
-  rxdart: ^0.23.0
+    path: ../todos_repository_core
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito: ^3.0.0
+  mocktail: ^0.1.4

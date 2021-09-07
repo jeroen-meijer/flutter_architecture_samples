@@ -17,7 +17,7 @@ class TodosRepositoryFlutter implements TodosRepository {
   final WebClient webClient;
 
   const TodosRepositoryFlutter({
-    @required this.fileStorage,
+    required this.fileStorage,
     this.webClient = const WebClient(),
   });
 
