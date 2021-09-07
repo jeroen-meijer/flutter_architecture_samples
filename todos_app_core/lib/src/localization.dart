@@ -1,3 +1,7 @@
+// <MANUAL EDITS>
+// ignore_for_file: import_of_legacy_library_into_null_safe
+// </MANUAL EDITS>
+
 // Copyright 2018 The Flutter Architecture Sample Authors. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found
 // in the LICENSE file.
@@ -20,11 +24,23 @@ class ArchSampleLocalizations {
     });
   }
 
-  static ArchSampleLocalizations? of(BuildContext context) {
-    return Localizations.of<ArchSampleLocalizations>(
+  static ArchSampleLocalizations of(BuildContext context) {
+    final localizations = Localizations.of<ArchSampleLocalizations>(
       context,
       ArchSampleLocalizations,
     );
+
+    if (localizations == null) {
+      throw StateError(
+        'ArchSampleLocalizations.of(context) returned null.\n'
+        'No ArchSampleLocalizations ancestor could be found in the widget '
+        'tree for context $context.\n'
+        'Try passing ArchSampleLocalizations.delegate to the top-level '
+        'widget.',
+      );
+    }
+
+    return localizations;
   }
 
   String get todos => Intl.message(
