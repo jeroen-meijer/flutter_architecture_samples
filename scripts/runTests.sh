@@ -27,7 +27,7 @@ requires code_coverage package
 
 # run unit and widget tests
 runTests () {
-  cd $1;
+  pushd $1
   if [ -f "pubspec.yaml" ] && [ -d "test" ]; then
     echo "running tests in $1"
 #    flutter packages get || echo "Ignore exit(1)"
@@ -43,11 +43,11 @@ runTests () {
     # run tests with coverage
     if grep flutter pubspec.yaml > /dev/null; then
       echo "run flutter tests"
-      if [ -f "test/all_tests.dart" ]; then
-        flutter test --coverage test/all_tests.dart || error=true
-      else
-        flutter test --coverage || error=true
-      fi
+      # if [ -f "test/all_tests.dart" ]; then
+      #   flutter test --coverage test/all_tests.dart || error=true
+      # else
+      flutter test --coverage || error=true
+      # fi
       if [ -d "coverage" ]; then
         # combine line coverage info from package tests to a common file
         sed "s/^SF:lib/SF:$escapedPath\/lib/g" coverage/lcov.info >> $2/lcov.info
@@ -68,7 +68,7 @@ runTests () {
       rm -f coverage.json
     fi
   fi
-  cd - > /dev/null
+  popd
 }
 
 runReport() {
